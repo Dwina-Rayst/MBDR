@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>『MBDR-webtoon』</title>
+    <link rel="shortcut icon" href="https://i.ibb.co/h1FDyh0C/Dwina-Rayst.png">
+    <link rel="icon" href="https://i.ibb.co/h1FDyh0C/Dwina-Rayst.png">
+
+    <style>
+        #logo_box2 {
+            width: 200px;
+            height: 200px;
+            background-color: hotpink;
+        }
+
+        #logo_box1 {
+            width: 145px;
+            height: 145px;
+            background-color: #FFD400;
+            position: relative;
+            left: 27.5px;
+            top: 27.5px;
+        }
+
+        #logo_img {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            left: 17.5px;
+            top: 17.5px;
+            background-color: navy;
+            padding: 5px;
+        }
+
+        body {
+            background-image: url(https://i.ibb.co/233nPx0V/heehee.gif);
+            background-repeat: round;
+            background-size: 100px;
+        }
+
+        h1 {
+            background-color: hotpink;
+        }
+
+        h2 {
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <div id="logo_box2">
+        <div id="logo_box1">
+            <img id="logo_img" src="https://i.ibb.co/sJkkQstS/Dwina-Rayst-white-background.jpg" onclick="go_home()">
+        </div>
+    </div>
+
+
+    <div id="MBDR">        
+        <div id="webtoon">
+            <h1>웹툰(webtoon)</h1>
+            <a href="https://comic.naver.com/community/u/DwinaRayst?lastPage=Creators"><h2><pre>작가(author)</pre></h2></a>
+            <a href="https://comic.naver.com/challenge/list?titleId=852238"><h2><pre>운명신화(運命神話)</pre></h2></a>
+        </div>
+    </div>
+
+
+    <script>
+        function go_to(where) {
+            window.location.href = where;
+        }
+
+        function go_home() {
+            go_to("https://dwina-rayst.github.io/MBDR");
+        }
+    </script>
+</body>
+</html>
