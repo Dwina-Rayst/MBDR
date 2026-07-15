@@ -69,7 +69,7 @@ const SKILL_POOL = [
     effect: null },
   { id: "ss_obliterate", name: "말살", rankTier: "SS", power: 42, element: "dark",
     conditions: [{ type: "cooldown", ms: 8000 }, { type: "hpFull" }, { type: "rankAtLeast", rank: "SS" }],
-    description: "계급 SS 이상, HP 최대일 때만. 쿨타임 8초.", icon: null",
+    description: "계급 SS 이상, HP 최대일 때만. 쿨타임 8초.", icon: null,
     effect: null },
   { id: "sss_apocalypse", name: "종말", rankTier: "SSS", power: 60, element: "dark",
     conditions: [{ type: "cooldown", ms: 10000 }, { type: "rankAtLeast", rank: "SSS" }],
