@@ -91,8 +91,8 @@ const ITEM_POOL = [
   { id: "a_flame_gauntlet", name: "화염 건틀렛", rankTier: "A", icon: null,
     passive: { maxHpBonus: 30, immuneElements: ["ice"] },
     active: { id: "flame_punch", name: "화염탄", power: 26, element: "fire",
-      conditions: [{ type: "cooldown", ms: 5000 }, { type: "hpAtLeast", 50 }],
-      description: "HP 최대일 때만. 쿨타임 5초. 화속성.", icon: null,
+      conditions: [{ type: "cooldown", ms: 5000 }, { type: "hpAtLeast", persent: 50 }],
+      description: "HP가 50% 이상일 때만. 쿨타임 5초. 화속성.", icon: null,
       effect: null } },
   {
     id: "ss_poseidon_trident", name: "포세이돈의 삼지창", rankTier: "SS", icon: null,
