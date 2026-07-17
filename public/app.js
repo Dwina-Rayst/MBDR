@@ -382,6 +382,27 @@ function playCastEffect(logEntry) {
   if (!container) return;
   if (def.effect.type === "spritesheet") playSpriteEffect(def.effect, container);
   else if (def.effect.type === "video") playVideoEffect(def.effect, container);
+  if (def.effect.sound) playEffectSound(def.effect.sound);
+}
+
+// 영상에 소리가 있다면 같이 재생 (브라우저가 소리 자동재생을 막으면 무음으로라도 재생 시도)
+function playVideoEffect(cfg, container) {
+  const vid = document.createElement("video");
+  vid.className = "effect-video";
+  vid.src = assetPath(cfg.src);
+  vid.muted = cfg.muted === true; // effect 설정에 muted:true를 넣지 않으면 기본적으로 소리 포함 재생
+  vid.playsInline = true;
+  vid.onended = () => vid.remove();
+  vid.onerror = () => vid.remove();
+  container.appendChild(vid);
+  vid.play().catch(() => { vid.muted = true; vid.play().catch(() => {}); });
+}
+
+// spritesheet 이펙트에 별도 효과음 파일을 곁들이고 싶을 때, 혹은 video 이펙트에
+// 영상 내장 소리와 별개로 추가 효과음을 더 얹고 싶을 때 사용
+function playEffectSound(src) {
+  const audio = new Audio(assetPath(src));
+  audio.play().catch(() => {});
 }
 function playSpriteEffect(cfg, container) {
   const el = document.createElement("div");
@@ -395,13 +416,6 @@ function playSpriteEffect(cfg, container) {
     frame++;
     if (frame >= cfg.frameCount) { clearInterval(timer); setTimeout(() => el.remove(), 50); }
   }, 1000 / (cfg.fps || 24));
-}
-function playVideoEffect(cfg, container) {
-  const vid = document.createElement("video");
-  vid.className = "effect-video"; vid.src = assetPath(cfg.src);
-  vid.autoplay = true; vid.muted = true; vid.playsInline = true;
-  vid.onended = () => vid.remove(); vid.onerror = () => vid.remove();
-  container.appendChild(vid);
 }
 
 // ===================== 자동 로그인 =====================
