@@ -100,7 +100,7 @@ const ITEM_POOL = [
     ],
   },
   { id: "mbdr", name: "MBDR", rankTier: "THE GOD", icon: "icons/mbdr.png",
-    passive: { maxHpBonus: 999999999, damageReduction: 0.999999999, immuneElements: ["hit", "sharp", "fire", "nature", "water", "electricity", "dark", "light", "none]},
+    passive: { maxHpBonus: 999999999, damageReduction: 0.999999999, immuneElements: ["hit", "sharp", "fire", "nature", "water", "electricity", "dark", "light", "none"]},
     active: { id: "ewmbdr_a_ewbebdr", name: "Made And End", power: 999999999, element: "THE GOD",
       conditions: [{ type: "cooldown", ms: 0.000000009 }, { type: "rankAtLeast", rank: "THE GOD" }],
       description: "Everything was Made By Dwina Rayst. And everything will be Ended By Dwina Rayst.", icon: null,
