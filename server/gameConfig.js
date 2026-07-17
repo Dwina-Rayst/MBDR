@@ -96,7 +96,7 @@ const ITEM_POOL = [
       { id: "sea_dragon_finale", name: "해룡의 화룡점정", power: 55, element: "water",
         conditions: [{ type: "rankAtLeast", rank: "SS" }, { type: "usesPerMatch", max: 1 }],
         description: "계급 SS 이상, 한 전투에서 딱 한 번만 사용 가능.",
-        icon: "icons/sea_draggon_finale.png",
+        icon: "icons/sea_dragon_finale.png",
         effect: { type: "spritesheet", src: "effects/sea_dragon_finale.png", frameWidth: 192, frameHeight: 192, frameCount: 60, fps: 30 } },
     ],
   },
