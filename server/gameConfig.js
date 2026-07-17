@@ -105,7 +105,7 @@ const ITEM_POOL = [
     active: { id: "ewmbdr_a_ewbebdr", name: "Made And End", power: 999999999, element: "THE GOD",
       conditions: [{ type: "cooldown", ms: 0.000000009 }, { type: "rankAtLeast", rank: "THE GOD" }],
       description: "Everything was Made By Dwina Rayst. And everything will be Ended By Dwina Rayst.", icon: "icons/mbdr.png",
-      effect: { type: "video", src: "effects/ewmbdr_a_ewbebdr.mp4" } } 
+      effect: { type: "video", src: "effects/ewmbdr_a_ewbebdr.mp4" } }
   },
 ];
 
