@@ -58,14 +58,14 @@ const SELL_PRICE_BY_RANK = {
 const SKILL_POOL = [
   { id: "e_jab", name: "잽", rankTier: "E", power: 1, element: "hit",
     conditions: [{ type: "cooldown", ms: 500 }],
-    description: "가벼운 일격. 쿨타임 0.5초.", icon: "icons/jab.png", effect: { type: "spritesheet", src: "effects/jab.png", frameWidth: 329, frameHeight: 192, frameCount: 60, fps: 30 } },
+    description: "가벼운 일격. 쿨타임 0.5초.", icon: "icons/jab.png", effect: { type: "video", src: "effects/jab.mp4" } },
   { id: "c_focused_shooting", name: "집중사격", rankTier: "C", power: 15, element: "none",
     conditions: [{ type: "cooldown", ms: 6000 }, { type: "hpFull" }],
-    description: "HP 최대일 때만, 쿨타임 6초.", icon: "icons/focused_shooting.png", effect: { type: "spritesheet", src: "effects/focused_shooting.png", frameWidth: 319, frameHeight: 192, frameCount: 60, fps: 30 } },
+    description: "HP 최대일 때만, 쿨타임 6초.", icon: "icons/focused_shooting.png", effect: { type: "video", src: "effects/focus_shooting.mp4" } },
   { id: "a_sword_aura", name: "검기", rankTier: "A", power: 25, element: "sharp",
     conditions: [{ type: "cooldown", ms: 1500 }, { type: "rankAtLeast", rank: "A" }],
     description: "계급 A 이상. 쿨타임 1.5초.", icon: "icons/sword_aura.png",
-    effect: { type: "spritesheet", src: "effects/sword_aura.png", frameWidth: 192, frameHeight: 192, frameCount: 60, fps: 30 } },
+    effect: { type: "video", src: "effects/sword_aura.mp4" } },
 ];
 
 // ---- 아이템 풀 (뽑기 불가 - 계급승급/전투 승리로만 획득. 패시브 + 액티브 내장) ----
@@ -83,7 +83,7 @@ const ITEM_POOL = [
     active: { id: "flame", name: "화염", power: 25, element: "fire",
       conditions: [{ type: "cooldown", ms: 5000 }, { type: "hpAtLeast", percent: 60 }],
       description: "HP가 60% 이상일 때만. 쿨타임 5초. 불 속성.", icon: "icons/flame.png",
-      effect: { type: "spritesheet", src: "effects/flame.png", frameWidth: 192, frameHeight: 192, frameCount: 60, fps: 30 } }
+      effect: { type: "video", src: "effects/flame.mp4" } }
   },
   {
     id: "ss_poseidon_trident", name: "포세이돈의 삼지창", rankTier: "SS", icon: "icons/poseidon_trident.png",
@@ -91,13 +91,13 @@ const ITEM_POOL = [
     active: { id: "trident_stab", name: "찌르기", power: 20, element: "sharp",
       conditions: [{ type: "cooldown", ms: 750 }], description: "쿨타임 0.75초의 기본 찌르기.",
       icon: "icons/trident_stab.png",
-      effect: { type: "spritesheet", src: "effects/trident_stab.png", frameWidth: 192, frameHeight: 192, frameCount: 60, fps: 30 } },
+      effect: { type: "video", src: "effects/trident_stab.mp4" } },
     activeExtra: [
       { id: "sea_dragon_finale", name: "해룡의 화룡점정", power: 55, element: "water",
         conditions: [{ type: "rankAtLeast", rank: "SS" }, { type: "usesPerMatch", max: 1 }],
         description: "계급 SS 이상, 한 전투에서 딱 한 번만 사용 가능.",
         icon: "icons/sea_dragon_finale.png",
-        effect: { type: "spritesheet", src: "effects/sea_dragon_finale.png", frameWidth: 192, frameHeight: 192, frameCount: 60, fps: 30 } },
+        effect: { type: "video", src: "effects/sea_dragon_finale.mp4" } },
     ],
   },
   { id: "mbdr", name: "MBDR", rankTier: "THE GOD", icon: "icons/mbdr.png",
