@@ -78,7 +78,7 @@ async function seedGodAccount() {
 // - 돈은 STARTING_MONEY["THE GOD"] 밑으로는 절대 안 내려가도록 보정 (그 이상 갖고 있으면 그대로 유지)
 async function syncGodLoadout() {
   const { SKILL_POOL, ITEM_POOL, STARTING_MONEY } = require("./gameConfig");
-  const godUsername = process.env.GOD_USERNAME || "GOD";
+  const godUsername = process.env.GOD_USERNAME || "DwinaRayst";
 
   const result = await client.execute({ sql: "SELECT * FROM users WHERE username = ?", args: [godUsername] });
   const row = result.rows[0];
