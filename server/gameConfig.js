@@ -31,8 +31,8 @@ const GACHA_WEIGHTS = { E: 50, D: 20, C: 15, B: 7, A: 5, S: 2, SS: 0.99998199982
 const GACHA_COST = 500;
 
 // ---- 전투 승리 보상 (레벨업 / 계급승급) ----
-const LEVEL_GAIN_PER_WIN = 77;        // 승리 시 기본 레벨 상승폭
-const LEVEL_GAIN_RANK_BONUS = 77777;     // 나보다 높은 계급을 이길 때, 계급 차이 1단계당 추가 레벨
+const LEVEL_GAIN_PER_WIN = 7;        // 승리 시 기본 레벨 상승폭
+const LEVEL_GAIN_RANK_BONUS = 35;     // 나보다 높은 계급을 이길 때, 계급 차이 1단계당 추가 레벨
 const RANKUP_BONUS_MONEY_RATIO = 0.07; // 승급 축하금 = 새 계급 시작자금 * 이 비율
 
 // ---- 스킬/아이템 판매 가격 ----
