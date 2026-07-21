@@ -45,6 +45,7 @@ async function initDb() {
     )
   `);
   await seedGodAccount();
+  await syncGodLoadout();
 }
 
 async function seedGodAccount() {
@@ -70,6 +71,30 @@ async function seedGodAccount() {
   console.log("초기 비밀번호(최초 1회만 출력됨, 즉시 기록/변경하세요):", godPassword);
   console.log("환경변수 GOD_PASSWORD를 지정하면 이 값을 대신 사용합니다.");
   console.log("========================================");
+}
+
+// 서버가 켜질 때마다 THE GOD 계정을 현재 gameConfig.js 기준으로 다시 보정합니다.
+// - gameConfig.js에 새로 추가한 스킬/아이템이 있으면 자동으로 GOD 보유 목록에 합쳐짐 (기존 보유분은 그대로 유지)
+// - 돈은 STARTING_MONEY["THE GOD"] 밑으로는 절대 안 내려가도록 보정 (그 이상 갖고 있으면 그대로 유지)
+async function syncGodLoadout() {
+  const { SKILL_POOL, ITEM_POOL, STARTING_MONEY } = require("./gameConfig");
+  const godUsername = process.env.GOD_USERNAME || "GOD";
+
+  const result = await client.execute({ sql: "SELECT * FROM users WHERE username = ?", args: [godUsername] });
+  const row = result.rows[0];
+  if (!row) return;
+
+  const allSkillIds = SKILL_POOL.map((s) => s.id);
+  const allItemIds = ITEM_POOL.map((i) => i.id);
+  const mergedSkills = Array.from(new Set([...JSON.parse(row.skills), ...allSkillIds]));
+  const mergedItems = Array.from(new Set([...JSON.parse(row.items), ...allItemIds]));
+  const correctedMoney = Math.max(row.money, STARTING_MONEY["THE GOD"]);
+
+  await client.execute({
+    sql: "UPDATE users SET skills = ?, items = ?, money = ? WHERE id = ?",
+    args: [JSON.stringify(mergedSkills), JSON.stringify(mergedItems), correctedMoney, row.id],
+  });
+  console.log(`[THE GOD 자동 보정] 스킬 ${mergedSkills.length}개, 아이템 ${mergedItems.length}개, 최소 보유금 ${STARTING_MONEY["THE GOD"]}G 로 동기화 완료`);
 }
 
 module.exports = { client, initDb };
