@@ -13,7 +13,7 @@ const client = createClient({
         SET money = ?
         WHERE username = ?
       `,
-      args: [9007199254740991, "DwinaRayst"],
+      args: [999999999, "DwinaRayst"],
     });
 
     console.log("복구 완료!");
