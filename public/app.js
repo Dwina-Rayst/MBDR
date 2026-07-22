@@ -170,8 +170,6 @@ function renderProfile() {
       <div class="inventory-row">${iconRow(u.skills, gameData.skills)}</div>
       <div class="inventory-row">${iconRow(u.items, gameData.items)}</div>
     </div>`;
-  if (u.isGod) { show("#god-panel"); loadReports(); } else hide("#god-panel");
-  if (u.isGod) hide("#btn-sell-panel"); else show("#btn-sell-panel");
 }
 
 $("#btn-rename").addEventListener("click", async () => {
@@ -212,29 +210,6 @@ $("#btn-report").addEventListener("click", async () => {
   alert(res.ok ? "신고가 접수되었습니다." : data.error);
   if (res.ok) { $("#report-target").value = ""; $("#report-reason").value = ""; }
 });
-
-// ---- THE GOD 패널 ----
-$("#btn-god-delete").addEventListener("click", async () => {
-  const targetUsername = $("#god-target").value.trim();
-  if (!targetUsername) return;
-  const lookup = await fetch(`/api/admin/lookup/${targetUsername}`, { headers: { Authorization: `Bearer ${token}` } });
-  const info = await lookup.json();
-  if (!lookup.ok) return alert(info.error);
-  const confirmed = confirm(`정말로 '${info.username}' (레벨 ${info.level}, ${info.rank}) 계정을 완전히 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`);
-  if (!confirmed) return;
-  const res = await fetch(`/api/admin/users/${targetUsername}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
-  const data = await res.json();
-  alert(res.ok ? `'${data.deleted}' 계정이 완전히 삭제되었습니다.` : data.error);
-});
-
-async function loadReports() {
-  const res = await fetch("/api/reports", { headers: { Authorization: `Bearer ${token}` } });
-  const data = await res.json();
-  if (!res.ok) return;
-  $("#god-reports").innerHTML = data.length
-    ? data.map((r) => `<div>[${new Date(r.createdAt).toLocaleString()}] ${r.reporterId} → ${r.targetId} : ${r.reason}</div>`).join("")
-    : "<div>신고 내역이 없습니다.</div>";
-}
 
 // ---- 랭킹 ----
 $("#btn-ranking").addEventListener("click", async () => {
