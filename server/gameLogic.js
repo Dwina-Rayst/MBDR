@@ -100,6 +100,6 @@ function usableSkillIds(playerSkills, playerItems) {
 module.exports = {
   RANK_ORDER, MAX_LEVEL, STARTING_MONEY,
   levelToRank, randomLevel, allActivesOfItem, getSkillDefinition,
-  getItemPassives, ownsSkill, startingLoadout, rollGachaSkill, getSellPrice, getSkillElements,
+  getItemPassives, ownsSkill, startingLoadout, rollGachaSkill, getSellPrice,
   usableSkillIds,
 };
