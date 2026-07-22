@@ -45,7 +45,19 @@ async function initDb() {
     )
   `);
   await seedGodAccount();
-  await syncGodLoadout();   // 그 다음 실행
+  await syncGodLoadout();
+  await addColumnIfMissing("users", "wins", "INTEGER NOT NULL DEFAULT 0");
+  await addColumnIfMissing("users", "losses", "INTEGER NOT NULL DEFAULT 0");
+}
+
+// 이미 만들어진 DB에도 안전하게 새 컬럼을 추가하기 위한 헬퍼 (컬럼이 이미 있으면 조용히 무시)
+async function addColumnIfMissing(table, column, definition) {
+  try {
+    await client.execute(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
+    console.log(`[DB 마이그레이션] ${table}.${column} 컬럼 추가 완료`);
+  } catch (e) {
+    // 이미 컬럼이 있으면 "duplicate column name" 류의 에러가 나는데, 정상 상황이므로 무시
+  }
 }
 
 async function seedGodAccount() {
