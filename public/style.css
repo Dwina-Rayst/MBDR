@@ -118,8 +118,8 @@ button:disabled {
 }
 
 #profile-card img {
-    width: 72px;
-    height: 72px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     object-fit: cover;
     background: #F2F2F2;
