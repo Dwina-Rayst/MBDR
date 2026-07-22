@@ -12,11 +12,9 @@ const ALIGO_SENDER = process.env.ALIGO_SENDER;
 
 async function sendSms(message) {
   if (!ALIGO_API_KEY || !ALIGO_USER_ID || !ALIGO_SENDER) {
-    console.log("========= [SMS 미설정 - 콘솔로 대체] =========");
-    console.log("수신:", ADMIN_PHONE);
+    console.log("W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.");
     console.log("내용:", message);
-    console.log("(.env에 ALIGO_API_KEY / ALIGO_USER_ID / ALIGO_SENDER를 채우면 실제로 발송됩니다)");
-    console.log("================================================");
+    console.log("W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.W.O.R.L.D.");
     return { simulated: true };
   }
   const body = new URLSearchParams({
