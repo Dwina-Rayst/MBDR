@@ -142,20 +142,11 @@ button:disabled {
     flex-wrap: wrap;
 }
 
-.report-box,
-.god-panel {
+.report-box {
     background: #F2DCB3;
     padding: 16px;
     border-radius: 10px;
     margin-top: 16px;
-}
-
-.god-panel {
-    border: 1px solid #F25E7A;
-}
-
-.god-panel h3 {
-    color: #F25E7A;
 }
 
 .inventory-row {
