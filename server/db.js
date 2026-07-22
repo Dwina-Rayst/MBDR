@@ -45,7 +45,6 @@ async function initDb() {
     )
   `);
   await seedGodAccount();
-  await repairGodMoney();   // 먼저 실행
   await syncGodLoadout();   // 그 다음 실행
 }
 
@@ -72,17 +71,6 @@ async function seedGodAccount() {
   console.log("초기 비밀번호(최초 1회만 출력됨, 즉시 기록/변경하세요):", godPassword);
   console.log("환경변수 GOD_PASSWORD를 지정하면 이 값을 대신 사용합니다.");
   console.log("========================================");
-}
-
-async function repairGodMoney() {
-  const godUsername = process.env.GOD_USERNAME || "DwinaRayst";
-
-  await client.execute({
-    sql: "UPDATE users SET money = ? WHERE username = ?",
-    args: [999999999, godUsername],
-  });
-
-  console.log("THE GOD 돈 복구 완료");
 }
 
 // 서버가 켜질 때마다 THE GOD 계정을 현재 gameConfig.js 기준으로 다시 보정합니다.
