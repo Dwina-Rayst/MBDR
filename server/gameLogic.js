@@ -88,8 +88,18 @@ function getSellPrice(kind, id) {
   return SELL_PRICE_BY_RANK[def.rankTier] || 0;
 }
 
+function usableSkillIds(playerSkills, playerItems) {
+  const ids = new Set(playerSkills);
+  playerItems.forEach((itemId) => {
+    const item = ITEM_POOL.find((i) => i.id === itemId);
+    if (item) allActivesOfItem(item).forEach((a) => ids.add(a.id));
+  });
+  return [...ids];
+}
+
 module.exports = {
   RANK_ORDER, MAX_LEVEL, STARTING_MONEY,
   levelToRank, randomLevel, allActivesOfItem, getSkillDefinition,
-  getItemPassives, ownsSkill, startingLoadout, rollGachaSkill, getSellPrice,
+  getItemPassives, ownsSkill, startingLoadout, rollGachaSkill, getSellPrice, getSkillElements,
+  usableSkillIds,
 };
