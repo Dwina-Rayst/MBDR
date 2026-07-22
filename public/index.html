@@ -45,7 +45,7 @@
       <input id="rename-input" placeholder="새 아이디 (3자 이상)" />
       <button id="btn-rename">변경하기</button>
     </div>
-    <div class="lobby-actions">
+    <div class="lobby-actions" style="display: flex; flex-flow: row wrap; gap: 10px;">
       <button id="btn-queue">⚔ 결투</button>
       <button id="btn-gacha">🎁 랜덤 스킬 뽑기</button>
       <button id="btn-ranking">🏆 랭킹</button>
@@ -59,7 +59,7 @@
     <div class="report-box">
       <h3>신고하기</h3>
       <input id="report-target" placeholder="신고 대상 아이디" />
-      <textarea id="report-reason" style="width: 163.2px; height: 22.8px; flex-direction: row; " placeholder="신고 사유"></textarea>
+      <textarea id="report-reason" style="width: 163.2px; height: 22.8px; display: flex; flex-flow: column nowrap; gap: 10px;" placeholder="신고 사유"></textarea>
       <button id="btn-report">신고 접수</button>
     </div>
 
@@ -67,7 +67,7 @@
       <h3>THE GOD 관리자 패널</h3>
       <input id="god-target" placeholder="삭제할 플레이어 아이디" />
       <button id="btn-god-delete">계정 완전 삭제</button>
-      <div id="god-reports" style="margin-top: 10px; "></div>
+      <div id="god-reports"></div>
     </div>
   </section>
 
