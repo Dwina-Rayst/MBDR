@@ -43,6 +43,10 @@ const SELL_PRICE_BY_RANK = {
   E: 100, D: 150, C: 200, B: 500, A: 1000, S: 5000, SS: 500000, SSS: 500000000,
 };
 
+// ---- CPU(봇) 매칭 ----
+const CPU_MATCH_WAIT_MS = 4597;              // 대기열에 혼자 남아있을 때 이 시간(ms) 후 CPU와 자동 매칭
+const CPU_ACTION_INTERVAL_MS = [500, 6000]; // CPU가 스킬 사용을 시도하는 간격 (최소, 최대 랜덤, ms)
+
 // ---- 발동 조건(condition) 종류 ----
 // { type: "cooldown", ms }            → 재사용 대기시간
 // { type: "hpFull" }                  → HP가 최대일 때만
@@ -136,7 +140,8 @@ const ITEM_POOL = [
 // 이 파일 수정만으로 충분합니다.
 
 module.exports = {
-  MAX_LEVEL, GOD_LEVEL, RANK_THRESHOLDS, STARTING_MONEY, GACHA_WEIGHTS, GACHA_COST,
+  MAX_LEVEL, RANK_THRESHOLDS, STARTING_MONEY, GACHA_WEIGHTS, GACHA_COST,
   LEVEL_GAIN_PER_WIN, LEVEL_GAIN_RANK_BONUS, RANKUP_BONUS_MONEY_RATIO, SELL_PRICE_BY_RANK,
+  CPU_MATCH_WAIT_MS, CPU_ACTION_INTERVAL_MS,
   SKILL_POOL, ITEM_POOL,
 };
