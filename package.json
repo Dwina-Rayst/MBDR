@@ -1,7 +1,7 @@
 {
-  "name": "world-game-server",
+  "name": " 『WORLD』 ",
   "version": "1.0.0",
-  "description": "W.O.R.L.D. (World Of Random Level Days) - 실서버 최종본",
+  "description": " 『WORLD』 - World Of Random Level Days",
   "main": "server/index.js",
   "type": "commonjs",
   "scripts": {
