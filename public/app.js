@@ -485,18 +485,48 @@ Object.keys(state.players).find(id=>id!==currentUser.id)
   socket.on("skill:fail", (payload) => flashSkillFail(payload));
   socket.on("error:msg", (msg) => console.warn(msg));
   socket.on("match:end", (result) => {
-    $("#result-detail").textContent = detail;
-    $("#result-report-target").value =
-    iWon
-    ? result.loser.username
-    : result.winner.username;
 
-    show("#result-report-box");
-    
+    currentMatchId = null;
+
+    showOnly("result-screen");
+
+    const iWon = result.winnerId === currentUser.id;
+
+    currentUser = iWon ? result.winner : result.loser;
+
+    if (iWon)
+        playVictoryBgm();
+    else
+        stopAllBgm();
+
+    $("#result-title").textContent =
+        iWon ? "🏆 승리!" : "💀 패배...";
+
+    let detail =
+        iWon
+            ? "상대의 아이템, 스킬, 돈을 모두 빼앗았습니다."
+            : "보유하던 아이템, 스킬, 돈을 모두 잃었습니다.";
+
+    if (result.forfeitedByTimeout)
+        detail +=
+            " (상대의 접속이 끊겨 자동 기권 처리됨)";
+
+    if (iWon && result.rankedUp && result.newRank)
+        detail += `\n🎉 계급이 [${result.newRank}]로 승급했습니다!`;
+
+    $("#result-detail").textContent = detail;
+
+    $("#result-report-target").value =
+        iWon
+            ? result.loser.username
+            : result.winner.username;
+
+    $("#result-report-box").classList.remove("hidden");
+
     renderProfile();
     renderMyPage();
-  });
-}
+
+});
 
 $("#btn-queue").addEventListener("click", () => socket.emit("queue:join"));
 $("#btn-cancel-queue").addEventListener("click", () => { socket.emit("queue:leave"); showOnly("lobby-screen"); playLobbyBgm(); });
