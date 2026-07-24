@@ -1,3 +1,10 @@
+/*  『MBDR』  오상징색( 『MBDR』 을 상징하는 다섯 개의 색상): #F2F2F2, #0D0D0D, #F2DCB3, #4590BF, #F25E7A
+    『MBDR』  이대비색(오상징색 중에서도 서로 잘 구별되어 서로 강조되는 효과를 가진 두 개의 색 조합):
+      1. 유사백흑: #F2F2F2 & #0D0D0D
+      2. 유사황청: #F2DCB3 & #4590BF
+    『MBDR』  강조색:
+      -유사분홍: #F25E7A */
+
 * { box-sizing: border-box; font-family: "Segoe UI", "Malgun Gothic", sans-serif; }
 
 body {
@@ -15,11 +22,12 @@ header {
 header h1 {
     margin: 0;
     letter-spacing: 4px;
+    background-color: #F25E7A;
     color: #4590BF;
 }
 
 .subtitle {
-    color: #0D0D0D;
+    color: #4590BF;
     margin: 4px 0 0;
 }
 
