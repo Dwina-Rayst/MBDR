@@ -2,9 +2,25 @@ const $ = (sel) => document.querySelector(sel);
 const show = (sel) => $(sel).classList.remove("hidden");
 const hide = (sel) => $(sel).classList.add("hidden");
 function showOnly(id) {
-  ["auth-screen", "lobby-screen", "queue-screen", "battle-screen", "result-screen"].forEach((s) =>
-    s === id ? show("#" + s) : hide("#" + s)
-  );
+  [
+    "login-screen",
+    "signup-screen",
+    "lobby-screen",
+    "shop-screen",
+    "mypage-screen",
+    "queue-screen",
+    "battle-screen",
+    "result-screen"
+  ].forEach((screen) => {
+    const el = document.getElementById(screen);
+    if (!el) return;
+
+    if (screen === id) {
+      el.classList.remove("hidden");
+    } else {
+      el.classList.add("hidden");
+    }
+  });
 }
 
 let token = localStorage.getItem("world_token") || null;
@@ -112,15 +128,18 @@ $("#signup-form").addEventListener("submit", async (e) => {
   let avatarBase64 = null;
   if (avatarFile && avatarFile.size > 0) {
     try { avatarBase64 = await resizeImageToBase64(avatarFile); }
-    catch (err) { return ($("#auth-message").textContent = "프로필 사진을 처리할 수 없습니다."); }
-  }
+    catch (err) {
+    return ($("#signup-message").textContent =
+        "프로필 사진를 처리할 수 없습니다.");
+    }
   const res = await fetch("/api/signup", {
     method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username: form.get("username"), password: form.get("password"), avatarBase64 }),
   });
   const data = await res.json();
-  if (!res.ok) return ($("#auth-message").textContent = data.error);
-  onAuthSuccess(data);
+ if (!res.ok)
+   return ($("#signup-message").textContent = data.error);
+ onAuthSuccess(data);
 });
 
 $("#login-form").addEventListener("submit", async (e) => {
@@ -131,25 +150,43 @@ $("#login-form").addEventListener("submit", async (e) => {
     body: JSON.stringify({ username: form.get("username"), password: form.get("password") }),
   });
   const data = await res.json();
-  if (!res.ok) return ($("#auth-message").textContent = data.error);
+  if (!res.ok)
+    return ($("#login-message").textContent = data.error);
   onAuthSuccess(data);
 });
 
 function onAuthSuccess(data) {
   token = data.token; currentUser = data.user;
   localStorage.setItem("world_token", token);
-  $("#auth-message").textContent = "";
+
+  const loginMsg = $("#login-message");
+  if (loginMsg) loginMsg.textContent = "";
+
+  const signupMsg = $("#signup-message");
+  if (signupMsg) signupMsg.textContent = "";
+
   showOnly("lobby-screen");
   renderProfile();
+  renderMyPage();
+
   playLobbyBgm();
   connectSocket();
-}
-
+  
 $("#btn-logout").addEventListener("click", () => {
   localStorage.removeItem("world_token");
   if (socket) socket.disconnect();
   location.reload();
 });
+
+$("#go-signup").onclick = (e) => {
+    e.preventDefault();
+    showOnly("signup-screen");
+};
+
+$("#go-login").onclick = (e) => {
+    e.preventDefault();
+    showOnly("login-screen");
+};
 
 // ===================== 프로필 / 로비 =====================
 function iconRow(ids, pool) {
@@ -409,5 +446,5 @@ function playSpriteEffect(cfg, container) {
     }
     localStorage.removeItem("world_token"); token = null;
   }
-  showOnly("auth-screen");
+  showOnly("login-screen");
 })();
