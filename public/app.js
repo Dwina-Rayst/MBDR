@@ -29,6 +29,7 @@ let gameData = { skills: [], items: [] };
 let socket = null;
 let currentMatchId = null;
 let lastLogLength = 0;
+let rankingScope = "rank";
 
 const FALLBACK_ICON =
   "data:image/svg+xml;utf8," +
@@ -168,7 +169,7 @@ function onAuthSuccess(data) {
   showOnly("lobby-screen");
   renderProfile();
   renderMyPage();
-
+  refreshRanking();
   playLobbyBgm();
   connectSocket();
   
@@ -177,6 +178,8 @@ $("#btn-logout").onclick = () => {
     stopAllBgm();
 
     localStorage.removeItem("world_token");
+
+    hide("#profile-btn");
 
     if(socket)
         socket.disconnect();
@@ -248,6 +251,7 @@ function renderProfile() {
 
         </div>
     `;
+  $("#profile-btn").classList.remove("hidden");
 }
 
 function renderMyPage() {
@@ -260,11 +264,13 @@ function renderMyPage() {
     }
 }
 
-$("#profile-btn").onclick = () => {
+$("#profile-btn").onclick=()=>{
 
     renderMyPage();
 
     showOnly("mypage-screen");
+
+    refreshRanking();
 
 };
 
@@ -276,12 +282,41 @@ $("#mypage-back").onclick = () => {
 
 $("#btn-shop").onclick = () => {
 
-    renderSellPanel();
-
     showOnly("shop-screen");
+
+    renderSellPanel();
 
 };
 
+async function refreshRanking() {
+
+    const type = $("#ranking-type-select").value;
+
+    const res = await fetch(
+        `/api/leaderboard?scope=${rankingScope}&type=${type}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    if (!res.ok) return;
+
+    const rows = await res.json();
+
+    $("#ranking-list").innerHTML =
+        rows.map((u, i) => `
+        <div style="margin-bottom:8px">
+            <b>${i + 1}위</b>
+            ${u.username}
+            <span class="rank-badge">${u.rank}</span>
+            Lv.${u.level}
+        </div>
+    `).join("");
+
+}
+  
 $("#shop-back").onclick = () => {
 
     showOnly("lobby-screen");
@@ -312,31 +347,6 @@ $("#btn-gacha").addEventListener("click", async () => {
   $("#gacha-result").textContent = data.duplicated
     ? `[${data.result.name}] 획득! (이미 보유중이라 중복)`
     : `🎉 [${data.result.name}] (${data.result.rankTier}급) 획득!`;
-});
-
-$("#btn-report").addEventListener("click", async () => {
-  const targetUsername = $("#report-target").value.trim();
-  const reason = $("#report-reason").value.trim();
-  if (!targetUsername || !reason) return alert("신고 대상과 사유를 입력하세요.");
-  const res = await fetch("/api/report", {
-    method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ targetUsername, reason }),
-  });
-  const data = await res.json();
-  alert(res.ok ? "신고가 접수되었습니다." : data.error);
-  if (res.ok) { $("#report-target").value = ""; $("#report-reason").value = ""; }
-});
-
-// ---- 랭킹 ----
-$("#btn-ranking").addEventListener("click", async () => {
-  const panel = $("#ranking-panel");
-  if (!panel.classList.contains("hidden")) return hide("#ranking-panel");
-  const res = await fetch("/api/leaderboard", { headers: { Authorization: `Bearer ${token}` } });
-  const rows = await res.json();
-  panel.innerHTML = "<h3>🏆 레벨 랭킹 TOP 20</h3>" + rows.map((u, i) =>
-    `<div>${i + 1}위 — <strong>${u.username}</strong> <span class="rank-badge">${u.rank}</span> Lv.${u.level}</div>`
-  ).join("");
-  show("#ranking-panel");
 });
 
 // ---- 판매 ----
@@ -379,17 +389,47 @@ function renderSellPanel() {
       currentUser = data.user;
       renderProfile();
       renderSellPanel();
+      show("#sell-panel");
     };
   });
 }
+  
+$("#btn-mypage-report-submit").onclick = async () => {
 
-$("#btn-sell-panel").addEventListener("click", () => {
-  const panel = $("#sell-panel");
-  if (!panel.classList.contains("hidden")) return hide("#sell-panel");
-  renderSellPanel();
-  show("#sell-panel");
-});
+    const targetUsername = $("#mypage-report-target").value.trim();
+    const reason = $("#mypage-report-reason").value.trim();
 
+    if (!targetUsername || !reason) {
+        alert("신고 대상과 사유를 입력하세요.");
+        return;
+    }
+
+    const res = await fetch("/api/report", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            targetUsername,
+            reason
+        })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        alert(data.error);
+        return;
+    }
+
+    alert("신고가 접수되었습니다.");
+
+    $("#mypage-report-target").value = "";
+    $("#mypage-report-reason").value = "";
+
+};
+  
 // ===================== 소켓 / 매칭 / 전투 =====================
 function connectSocket() {
   socket = io();
@@ -397,7 +437,10 @@ function connectSocket() {
 
   socket.on("account:deleted", () => { alert("이 계정은 관리자에 의해 삭제되었습니다."); localStorage.removeItem("world_token"); location.reload(); });
   socket.on("queue:waiting", () => { hide("#lobby-screen"); show("#queue-screen"); });
-  socket.on("match:start", (state) => { currentMatchId = state.id; lastLogLength = 0; hide("#queue-screen"); showOnly("battle-screen"); playBattleBgm(); hide("#disconnect-banner"); renderBattle(state); });
+  socket.on("match:start", (state) => { currentMatchId = state.id; lastLogLength = 0; hide("#queue-screen"); showOnly("battle-screen"); playBattleBgm(); hide("#disconnect-banner"); renderBattle(state); $("#battle-report-target").value =
+state.players[
+Object.keys(state.players).find(id=>id!==currentUser.id)
+].username; });
   socket.on("match:update", (state) => { hide("#disconnect-banner"); renderBattle(state); });
   socket.on("opponent:disconnected", ({ graceMs }) => {
     $("#disconnect-banner").textContent = `상대의 접속이 끊겼습니다. ${Math.round(graceMs / 1000)}초 안에 재접속하지 않으면 자동으로 기권패 처리됩니다.`;
@@ -407,16 +450,16 @@ function connectSocket() {
   socket.on("skill:fail", (payload) => flashSkillFail(payload));
   socket.on("error:msg", (msg) => console.warn(msg));
   socket.on("match:end", (result) => {
-    currentMatchId = null;
-    showOnly("result-screen");
-    const iWon = result.winnerId === currentUser.id;
-    currentUser = iWon ? result.winner : result.loser;
-    if (iWon) playVictoryBgm(); else stopAllBgm();
-    $("#result-title").textContent = iWon ? "🏆 승리!" : "💀 패배...";
-    let detail = iWon ? "상대의 아이템, 스킬, 돈을 모두 빼앗았습니다." : "보유하던 아이템, 스킬, 돈을 모두 잃었습니다.";
-    if (result.forfeitedByTimeout) detail += " (상대의 접속이 끊겨 자동 기권 처리됨)";
-    if (iWon && result.rankedUp && result.newRank) detail += `\n🎉 계급이 [${result.newRank}]로 승급했습니다!`;
     $("#result-detail").textContent = detail;
+    $("#result-report-target").value =
+    iWon
+    ? result.loser.username
+    : result.winner.username;
+
+    show("#result-report-box");
+    
+    renderProfile();
+    renderMyPage();
   });
 }
 
@@ -429,6 +472,118 @@ $("#btn-back-to-lobby").addEventListener("click", () => {
     showOnly("lobby-screen");
     playLobbyBgm();
 });
+$("#btn-battle-report-toggle").onclick = () => {
+  $("#battle-report-panel").classList.toggle("hidden");
+};
+$("#btn-battle-report-submit").onclick = async () => {
+
+    const targetUsername = $("#battle-report-target").value;
+    const reason = $("#battle-report-reason").value.trim();
+
+    if (!reason) {
+        alert("신고 사유를 입력하세요.");
+        return;
+    }
+
+    const res = await fetch("/api/report", {
+
+        method: "POST",
+
+        headers: {
+
+            "Content-Type":"application/json",
+
+            Authorization:`Bearer ${token}`
+
+        },
+
+        body:JSON.stringify({
+
+            targetUsername,
+
+            reason
+
+        })
+
+    });
+
+    const data = await res.json();
+
+    if(!res.ok){
+
+        alert(data.error);
+
+        return;
+
+    }
+
+    alert("신고 완료");
+
+    $("#battle-report-reason").value="";
+
+};
+$("#btn-result-report-submit").onclick = async ()=>{
+
+    const targetUsername=$("#result-report-target").value;
+
+    const reason=$("#result-report-reason").value.trim();
+
+    if(!reason){
+
+        alert("사유를 입력하세요.");
+
+        return;
+
+    }
+
+    const res=await fetch("/api/report",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json",
+            Authorization:`Bearer ${token}`
+        },
+
+        body:JSON.stringify({
+            targetUsername,
+            reason
+        })
+
+    });
+
+    const data=await res.json();
+
+    if(!res.ok){
+
+        alert(data.error);
+
+        return;
+
+    }
+
+    alert("신고 완료");
+
+    $("#result-report-reason").value="";
+
+};
+document.querySelectorAll(".tab-btn").forEach(btn => {
+
+    btn.onclick = () => {
+
+        document.querySelectorAll(".tab-btn")
+            .forEach(x => x.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        rankingScope = btn.dataset.scope;
+
+        refreshRanking();
+
+    };
+
+});
+$("#ranking-type-select").onchange = refreshRanking;
 
 function renderBattle(state) {
   const me = state.players[currentUser.id];
@@ -525,6 +680,7 @@ function playSpriteEffect(cfg, container) {
       showOnly("lobby-screen");
       renderProfile();
       renderMyPage();
+      refreshRanking();
       playLobbyBgm();
       connectSocket();
       return;
@@ -532,4 +688,16 @@ function playSpriteEffect(cfg, container) {
     localStorage.removeItem("world_token"); token = null;
   }
   showOnly("login-screen");
+
+hide("#profile-btn");
+
+hide("#shop-screen");
+
+hide("#mypage-screen");
+
+hide("#queue-screen");
+
+hide("#battle-screen");
+
+hide("#result-screen");
 })();
