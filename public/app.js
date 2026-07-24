@@ -172,11 +172,18 @@ function onAuthSuccess(data) {
   playLobbyBgm();
   connectSocket();
   
-$("#btn-logout").addEventListener("click", () => {
-  localStorage.removeItem("world_token");
-  if (socket) socket.disconnect();
-  location.reload();
-});
+$("#btn-logout").onclick = () => {
+
+    stopAllBgm();
+
+    localStorage.removeItem("world_token");
+
+    if(socket)
+        socket.disconnect();
+
+    location.reload();
+
+};
 
 $("#go-signup").onclick = (e) => {
     e.preventDefault();
@@ -198,17 +205,89 @@ function iconRow(ids, pool) {
 }
 
 function renderProfile() {
-  const u = currentUser;
-  $("#profile-card").innerHTML = `
-    <img src="${u.avatarBase64 || FALLBACK_ICON}" onerror="this.src='${FALLBACK_ICON}'" />
-    <div style="flex:1">
-      <div><strong>${u.username}</strong> <span class="rank-badge">${u.rank}</span></div>
-      <div>레벨 ${u.level} · 💰 ${u.money}G</div>
-      <div class="inventory-row">${iconRow(u.skills, gameData.skills)}</div>
-      <div class="inventory-row">${iconRow(u.items, gameData.items)}</div>
-    </div>`;
+    const u = currentUser;
+    if (!u) return;
+
+    // 우측 상단 프로필 버튼
+    const profileBtn = $("#profile-btn");
+    profileBtn.innerHTML = `
+        <img src="${u.avatarBase64 || FALLBACK_ICON}"
+             onerror="this.src='${FALLBACK_ICON}'">
+        <span>${u.username}</span>
+    `;
+    profileBtn.classList.remove("hidden");
+
+    // 마이페이지 프로필
+    const profile = $("#mypage-profile");
+    profile.innerHTML = `
+        <img src="${u.avatarBase64 || FALLBACK_ICON}"
+             onerror="this.src='${FALLBACK_ICON}'">
+
+        <div style="flex:1">
+
+            <h2>
+                ${u.username}
+                <span class="rank-badge">${u.rank}</span>
+            </h2>
+
+            <div>Lv.${u.level}</div>
+
+            <div>💰 ${u.money} G</div>
+
+            <h3>보유 스킬</h3>
+
+            <div class="inventory-row">
+                ${iconRow(u.skills, gameData.skills)}
+            </div>
+
+            <h3>보유 아이템</h3>
+
+            <div class="inventory-row">
+                ${iconRow(u.items, gameData.items)}
+            </div>
+
+        </div>
+    `;
 }
 
+function renderMyPage() {
+    renderProfile();
+
+    if (currentUser.isGod) {
+        show("#god-panel");
+    } else {
+        hide("#god-panel");
+    }
+}
+
+$("#profile-btn").onclick = () => {
+
+    renderMyPage();
+
+    showOnly("mypage-screen");
+
+};
+
+$("#mypage-back").onclick = () => {
+
+    showOnly("lobby-screen");
+
+};
+
+$("#btn-shop").onclick = () => {
+
+    renderSellPanel();
+
+    showOnly("shop-screen");
+
+};
+
+$("#shop-back").onclick = () => {
+
+    showOnly("lobby-screen");
+
+};
+  
 $("#btn-rename").addEventListener("click", async () => {
   const newUsername = $("#rename-input").value.trim();
   if (!newUsername) return;
@@ -344,7 +423,12 @@ function connectSocket() {
 $("#btn-queue").addEventListener("click", () => socket.emit("queue:join"));
 $("#btn-cancel-queue").addEventListener("click", () => { socket.emit("queue:leave"); showOnly("lobby-screen"); playLobbyBgm(); });
 $("#btn-surrender").addEventListener("click", () => { if (confirm("정말로 기권하시겠습니까? 보유한 아이템/스킬/돈을 모두 잃습니다.")) socket.emit("surrender"); });
-$("#btn-back-to-lobby").addEventListener("click", () => { renderProfile(); showOnly("lobby-screen"); playLobbyBgm(); });
+$("#btn-back-to-lobby").addEventListener("click", () => {
+    renderProfile();
+    renderMyPage();
+    showOnly("lobby-screen");
+    playLobbyBgm();
+});
 
 function renderBattle(state) {
   const me = state.players[currentUser.id];
@@ -440,6 +524,7 @@ function playSpriteEffect(cfg, container) {
       currentUser = data.user;
       showOnly("lobby-screen");
       renderProfile();
+      renderMyPage();
       playLobbyBgm();
       connectSocket();
       return;
