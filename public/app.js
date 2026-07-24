@@ -170,8 +170,10 @@ function onAuthSuccess(data) {
   renderProfile();
   renderMyPage();
   refreshRanking();
+  refreshGodPanel();
   playLobbyBgm();
   connectSocket();
+  
   
 $("#btn-logout").onclick = () => {
 
@@ -258,19 +260,27 @@ function renderMyPage() {
     renderProfile();
 
     if (currentUser.isGod) {
-        show("#god-panel");
-    } else {
-        hide("#god-panel");
+
+      show("#god-panel");
+
+      refreshGodPanel();
+
+    }
+    else {
+      hide("#god-panel");
+
     }
 }
 
-$("#profile-btn").onclick=()=>{
+$("#profile-btn").onclick = () => {
 
     renderMyPage();
 
     showOnly("mypage-screen");
 
     refreshRanking();
+
+    refreshGodPanel();
 
 };
 
@@ -314,6 +324,31 @@ async function refreshRanking() {
             Lv.${u.level}
         </div>
     `).join("");
+
+}
+
+async function refreshGodPanel() {
+
+    if (!currentUser.isGod) return;
+
+    const res = await fetch("/api/admin/reports", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!res.ok) return;
+
+    const reports = await res.json();
+
+    $("#god-reports").innerHTML =
+        reports.map(r => `
+            <div class="report-box">
+                <b>${r.reporter}</b> →
+                <b>${r.target}</b><br>
+                ${r.reason}
+            </div>
+        `).join("");
 
 }
   
@@ -681,6 +716,7 @@ function playSpriteEffect(cfg, container) {
       renderProfile();
       renderMyPage();
       refreshRanking();
+      refreshGodPanel();
       playLobbyBgm();
       connectSocket();
       return;
