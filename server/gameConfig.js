@@ -47,6 +47,10 @@ const SELL_PRICE_BY_RANK = {
 const CPU_MATCH_WAIT_MS = 4597;              // 대기열에 혼자 남아있을 때 이 시간(ms) 후 CPU와 자동 매칭
 const CPU_ACTION_INTERVAL_MS = [500, 6000]; // CPU가 스킬 사용을 시도하는 간격 (최소, 최대 랜덤, ms)
 
+// ---- 마이페이지 "종합 랭킹" 점수 계산 가중치 ----
+// 종합점수 = 레벨*level + 승수*wins + 패수*losses + 재산*wealth
+const OVERALL_SCORE_WEIGHTS = { level: 10, wins: 5, losses: -2, wealth: 0.01 };
+
 // ---- 발동 조건(condition) 종류 ----
 // { type: "cooldown", ms }            → 재사용 대기시간
 // { type: "hpFull" }                  → HP가 최대일 때만
@@ -140,8 +144,8 @@ const ITEM_POOL = [
 // 이 파일 수정만으로 충분합니다.
 
 module.exports = {
-  MAX_LEVEL, RANK_THRESHOLDS, STARTING_MONEY, GACHA_WEIGHTS, GACHA_COST,
+  MAX_LEVEL, GOD_LEVEL, RANK_THRESHOLDS, STARTING_MONEY, GACHA_WEIGHTS, GACHA_COST,
   LEVEL_GAIN_PER_WIN, LEVEL_GAIN_RANK_BONUS, RANKUP_BONUS_MONEY_RATIO, SELL_PRICE_BY_RANK,
-  CPU_MATCH_WAIT_MS, CPU_ACTION_INTERVAL_MS,
+  CPU_MATCH_WAIT_MS, CPU_ACTION_INTERVAL_MS, OVERALL_SCORE_WEIGHTS,
   SKILL_POOL, ITEM_POOL,
 };
