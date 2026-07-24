@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>W.O.R.L.D. - World Of Random Level Days</title>
+<link rel="stylesheet" href="style.css" />
+<link rel="shortcut icon" href="https://i.ibb.co/h1FDyh0C/Dwina-Rayst.png">
+<link rel="icon" href="https://i.ibb.co/h1FDyh0C/Dwina-Rayst.png">
+</head>
+<body>
+  <header>
+    <h1>W.O.R.L.D.</h1>
+    <p class="subtitle">World Of Random Level Days</p>
+    <button id="mute-btn">🔊 BGM</button>
+  </header>
+
+  <section id="auth-screen">
+    <div class="auth-box">
+      <h2>회원가입</h2>
+      <form id="signup-form">
+        <input type="text" name="username" placeholder="아이디 (3자 이상)" required />
+        <input type="password" name="password" placeholder="비밀번호 (8자 이상)" required minlength="8" />
+        <label class="file-label">프로필 사진
+          <input type="file" name="avatar" accept="image/*" />
+        </label>
+        <button type="submit">회원가입 (랜덤 레벨 부여)</button>
+      </form>
+    </div>
+    <div class="auth-box">
+      <h2>로그인</h2>
+      <form id="login-form">
+        <input type="text" name="username" placeholder="아이디" required />
+        <input type="password" name="password" placeholder="비밀번호" required />
+        <button type="submit">로그인</button>
+      </form>
+    </div>
+    <p id="auth-message"></p>
+  </section>
+
+  <section id="lobby-screen" class="hidden">
+    <div id="profile-card"></div>
+    <div class="report-box">
+      <h3>내 아이디 변경</h3>
+      <input id="rename-input" placeholder="새 아이디 (3자 이상)" />
+      <button id="btn-rename">변경하기</button>
+    </div>
+    <div class="lobby-actions" style="display: flex; flex-flow: row wrap; gap: 10px;">
+      <button id="btn-queue">⚔ 결투</button>
+      <button id="btn-gacha">🎁 랜덤 스킬 뽑기</button>
+      <button id="btn-ranking">🏆 랭킹</button>
+      <button id="btn-sell-panel">💰 스킬 및 아이템 판매</button>
+      <button id="btn-logout">로그아웃</button>
+    </div>
+    <div id="gacha-result"></div>
+    <div id="ranking-panel" class="hidden report-box"></div>
+    <div id="sell-panel" class="hidden report-box"></div>
+
+    <div class="report-box">
+      <h3>신고하기</h3>
+      <input id="report-target" placeholder="신고 대상 아이디" />
+      <textarea id="report-reason" style="width: 163.2px; height: 22.8px; display: flex; flex-flow: column nowrap; gap: 10px;" placeholder="신고 사유"></textarea>
+      <button id="btn-report">신고 접수</button>
+    </div>
+  </section>
+
+  <section id="queue-screen" class="hidden">
+    <p>상대를 찾는 중입니다...</p>
+    <button id="btn-cancel-queue">취소</button>
+  </section>
+
+  <section id="battle-screen" class="hidden">
+    <div id="disconnect-banner" class="hidden"></div>
+    <div id="battle-players"></div>
+    <div id="skill-bar"></div>
+    <button id="btn-surrender">기권</button>
+    <div id="battle-log"></div>
+  </section>
+
+  <section id="result-screen" class="hidden">
+    <h2 id="result-title"></h2>
+    <p id="result-detail"></p>
+    <button id="btn-back-to-lobby">로비로 돌아가기</button>
+  </section>
+
+  <audio id="bgm-lobby" src="./lobby-bgm.mp3" loop preload="auto"></audio>
+  <audio id="bgm-battle" src="./battle-bgm.mp3" preload="auto"></audio>
+  <audio id="bgm-victory" src="./victory-bgm.mp3" preload="auto"></audio>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
