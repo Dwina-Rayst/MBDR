@@ -133,7 +133,7 @@ class CombatServer {
     const passives = getItemPassives(loadout.items);
     const maxHp = BASE_HP + passives.maxHpBonus;
     return {
-      userId: "CPU", username: `CPU (${rank})`, rank, isGod: false, isCpu: true,
+      userId: "CPU", username: `IAMME`, rank, isGod: false, isCpu: true,
       skills: loadout.skills, items: loadout.items,
       maxHp, hp: maxHp,
       damageReduction: passives.damageReduction,
