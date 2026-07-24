@@ -173,7 +173,7 @@ function onAuthSuccess(data) {
   refreshGodPanel();
   playLobbyBgm();
   connectSocket();
-  
+}
   
 $("#btn-logout").onclick = () => {
 
