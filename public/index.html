@@ -10,12 +10,28 @@
 </head>
 <body>
   <header>
+    <button id="mute-btn" class="header-btn header-btn-left">🔊 BGM</button>
     <h1>W.O.R.L.D.</h1>
     <p class="subtitle">World Of Random Level Days</p>
-    <button id="mute-btn">🔊 BGM</button>
+    <button id="profile-btn" class="header-btn header-btn-right hidden"></button>
   </header>
 
-  <section id="auth-screen">
+  <!-- 로그인 -->
+  <section id="login-screen">
+    <div class="auth-box">
+      <h2>로그인</h2>
+      <form id="login-form">
+        <input type="text" name="username" placeholder="아이디" required />
+        <input type="password" name="password" placeholder="비밀번호" required />
+        <button type="submit">로그인</button>
+      </form>
+      <p class="auth-switch">아직 계정이 없으신가요? <a href="#" id="go-signup">회원가입</a></p>
+    </div>
+    <p id="login-message" class="auth-message"></p>
+  </section>
+
+  <!-- 회원가입 -->
+  <section id="signup-screen" class="hidden">
     <div class="auth-box">
       <h2>회원가입</h2>
       <form id="signup-form">
@@ -26,61 +42,114 @@
         </label>
         <button type="submit">회원가입 (랜덤 레벨 부여)</button>
       </form>
+      <p class="auth-switch">이미 계정이 있으신가요? <a href="#" id="go-login">로그인</a></p>
     </div>
-    <div class="auth-box">
-      <h2>로그인</h2>
-      <form id="login-form">
-        <input type="text" name="username" placeholder="아이디" required />
-        <input type="password" name="password" placeholder="비밀번호" required />
-        <button type="submit">로그인</button>
-      </form>
-    </div>
-    <p id="auth-message"></p>
+    <p id="signup-message" class="auth-message"></p>
   </section>
 
+  <!-- 로비 -->
   <section id="lobby-screen" class="hidden">
-    <div id="profile-card"></div>
+    <div class="lobby-actions" style="display: flex; flex-flow: row wrap; gap: 10px; justify-content: center;">
+      <button id="btn-queue">⚔ 결투</button>
+      <button id="btn-shop">🏪 상점</button>
+    </div>
+  </section>
+
+  <!-- 상점 (뽑기 + 판매) -->
+  <section id="shop-screen" class="hidden">
+    <button class="back-btn" id="shop-back">← 로비로</button>
+    <h2>🏪 상점</h2>
+
+    <div class="report-box">
+      <h3>🎁 랜덤 스킬 뽑기</h3>
+      <button id="btn-gacha">뽑기</button>
+      <div id="gacha-result"></div>
+    </div>
+
+    <div id="sell-panel" class="report-box"></div>
+  </section>
+
+  <!-- 마이페이지 -->
+  <section id="mypage-screen" class="hidden">
+    <button class="back-btn" id="mypage-back">← 로비로</button>
+    <h2>마이페이지</h2>
+    <div id="mypage-profile"></div>
+
     <div class="report-box">
       <h3>내 아이디 변경</h3>
       <input id="rename-input" placeholder="새 아이디 (3자 이상)" />
       <button id="btn-rename">변경하기</button>
     </div>
-    <div class="lobby-actions" style="display: flex; flex-flow: row wrap; gap: 10px;">
-      <button id="btn-queue">⚔ 결투</button>
-      <button id="btn-gacha">🎁 랜덤 스킬 뽑기</button>
-      <button id="btn-ranking">🏆 랭킹</button>
-      <button id="btn-sell-panel">💰 스킬 및 아이템 판매</button>
-      <button id="btn-logout">로그아웃</button>
+
+    <div class="report-box">
+      <div class="ranking-header">
+        <h3>🏆 랭킹</h3>
+        <select id="ranking-type-select">
+          <option value="overall">종합 랭킹</option>
+          <option value="winrate">승률 랭킹</option>
+          <option value="wealth">부자 랭킹</option>
+        </select>
+      </div>
+      <div class="ranking-tabs">
+        <button class="tab-btn active" data-scope="rank">계급별 랭킹</button>
+        <button class="tab-btn" data-scope="global">통합 랭킹</button>
+      </div>
+      <div id="ranking-list"></div>
     </div>
-    <div id="gacha-result"></div>
-    <div id="ranking-panel" class="hidden report-box"></div>
-    <div id="sell-panel" class="hidden report-box"></div>
+
+    <div id="god-panel" class="hidden report-box">
+      <h3>👑 THE GOD 관리자 패널</h3>
+      <input id="god-target" placeholder="삭제할 플레이어 아이디" />
+      <button id="btn-god-delete">계정 완전 삭제</button>
+      <div id="god-reports" style="margin-top:10px;"></div>
+    </div>
 
     <div class="report-box">
       <h3>신고하기</h3>
-      <input id="report-target" placeholder="신고 대상 아이디" />
-      <textarea id="report-reason" style="width: 163.2px; height: 22.8px; display: flex; flex-flow: column nowrap; gap: 10px;" placeholder="신고 사유"></textarea>
-      <button id="btn-report">신고 접수</button>
+      <input id="mypage-report-target" placeholder="신고 대상 아이디" />
+      <textarea id="mypage-report-reason" placeholder="신고 사유"></textarea>
+      <button id="btn-mypage-report-submit">신고 접수</button>
     </div>
+
+    <button id="btn-logout">로그아웃</button>
   </section>
 
+  <!-- 매칭 대기 -->
   <section id="queue-screen" class="hidden">
     <p>상대를 찾는 중입니다...</p>
     <button id="btn-cancel-queue">취소</button>
   </section>
 
+  <!-- 전투 -->
   <section id="battle-screen" class="hidden">
     <div id="disconnect-banner" class="hidden"></div>
     <div id="battle-players"></div>
     <div id="skill-bar"></div>
-    <button id="btn-surrender">기권</button>
+    <div class="battle-actions">
+      <button id="btn-surrender">기권</button>
+      <button id="btn-battle-report-toggle">🚨 상대 신고</button>
+    </div>
+    <div id="battle-report-panel" class="hidden report-box">
+      <h3>상대 신고</h3>
+      <input id="battle-report-target" readonly />
+      <textarea id="battle-report-reason" placeholder="신고 사유"></textarea>
+      <button id="btn-battle-report-submit">신고 접수</button>
+    </div>
     <div id="battle-log"></div>
   </section>
 
+  <!-- 전투 결과 -->
   <section id="result-screen" class="hidden">
     <h2 id="result-title"></h2>
     <p id="result-detail"></p>
     <button id="btn-back-to-lobby">로비로 돌아가기</button>
+
+    <div id="result-report-box" class="report-box hidden">
+      <h3>상대 신고</h3>
+      <input id="result-report-target" readonly />
+      <textarea id="result-report-reason" placeholder="신고 사유"></textarea>
+      <button id="btn-result-report-submit">신고 접수</button>
+    </div>
   </section>
 
   <audio id="bgm-lobby" src="./lobby-bgm.mp3" loop preload="auto"></audio>
