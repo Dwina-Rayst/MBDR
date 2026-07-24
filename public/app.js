@@ -141,7 +141,7 @@ $("#signup-form").addEventListener("submit", async (e) => {
  if (!res.ok)
    return ($("#signup-message").textContent = data.error);
  onAuthSuccess(data);
-});
+};
 
 $("#login-form").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -766,4 +766,4 @@ hide("#queue-screen");
 hide("#battle-screen");
 
 hide("#result-screen");
-})();
+)}
