@@ -24,9 +24,6 @@ header h1 {
 }
 
 #mute-btn {
-    position: absolute;
-    right: 16px;
-    top: 16px;
     background: #4590BF;
     color: #F2F2F2;
     border: 1px solid #F2DCB3;
@@ -34,16 +31,44 @@ header h1 {
     border-radius: 6px;
 }
 
+.header-btn { position: absolute; top: 16px; }
+.header-btn-left { left: 16px; }
+.header-btn-right {
+    right: 16px;
+    display: flex; align-items: center; gap: 8px;
+    background: #F2DCB3; color: #0D0D0D; border: 1px solid #4590BF;
+    padding: 4px 12px 4px 4px; border-radius: 999px;
+}
+.header-btn-right img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #F2F2F2; }
+
+.auth-switch { text-align: center; margin-top: 10px; font-size: 13px; color: #0D0D0D; }
+.auth-switch a { color: #4590BF; font-weight: bold; text-decoration: underline; cursor: pointer; }
+
+.back-btn { background: #F2DCB3; color: #4590BF; margin-bottom: 12px; }
+
+.battle-actions { display: flex; gap: 8px; margin-top: 8px; }
+
+.ranking-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.ranking-header h3 { margin: 0; }
+#ranking-type-select { background: #F2F2F2; color: #4590BF; border: 1px solid #4590BF; border-radius: 6px; padding: 6px 8px; font-weight: bold; }
+.ranking-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; }
+.tab-btn { background: #F2F2F2; color: #4590BF; border: 1px solid #4590BF; padding: 6px 12px; border-radius: 999px; font-weight: normal; }
+.tab-btn.active { background: #4590BF; color: #F2F2F2; font-weight: bold; }
+
+#god-panel { border: 2px solid #F25E7A; }
+#god-panel h3 { color: #F25E7A; }
+
 .hidden {
     display: none !important;
 }
 
-#auth-screen {
+#login-screen, #signup-screen {
     display: flex;
-    gap: 24px;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
     justify-content: center;
     padding: 32px;
-    flex-wrap: wrap;
 }
 
 .auth-box {
@@ -96,19 +121,19 @@ button:disabled {
     cursor: not-allowed;
 }
 
-#auth-message {
+.auth-message {
     text-align: center;
     color: #F25E7A;
     white-space: pre-line;
 }
 
-#lobby-screen {
+#lobby-screen, #shop-screen, #mypage-screen {
     max-width: 640px;
     margin: 0 auto;
     padding: 20px;
 }
 
-#profile-card {
+#profile-card, #mypage-profile {
     background: #F2DCB3;
     border-radius: 10px;
     padding: 16px;
@@ -117,7 +142,7 @@ button:disabled {
     align-items: top;
 }
 
-#profile-card img {
+#profile-card img, #mypage-profile img {
     width: 45px;
     height: 45px;
     border-radius: 50%;
